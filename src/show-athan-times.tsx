@@ -170,6 +170,19 @@ function LocationForm() {
   );
 }
 
+function HoursSystemDropdown() {
+  const [hoursSystem, setHoursSystem] = useState<string>("12");
+
+  return (
+    <List.Dropdown id="hoursSystem" value={hoursSystem} onChange={setHoursSystem} tooltip="Select a hours system">
+      <List.Dropdown.Section title="Hours System">
+        <List.Dropdown.Item title="12 hours" value="12" />
+        <List.Dropdown.Item title="24 hours" value="24" />
+      </List.Dropdown.Section>
+    </List.Dropdown>
+  );
+}
+
 function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
   const [athanTimes, setAthanTimes] = useState<AthanTimings>();
   const [loadingTimes, setLoadingTimes] = useState(false);
@@ -262,6 +275,7 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
   return (
     <List
       navigationTitle={`Athan Times - ${selectedCountry?.name}, ${selectedCity}`}
+      searchBarAccessory={<HoursSystemDropdown />}
       // To Fix : Main action are not showing
       actions={
         <ActionPanel>
@@ -352,22 +366,6 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
   );
 }
 
-function Welcome() {
-  <List
-    actions={
-      <ActionPanel>
-        <Action.Push title="Location Form" target={<LocationForm />} />
-      </ActionPanel>
-    }
-  >
-    <List.EmptyView
-      title="Welcome to Athan Times"
-      icon={{ source: "https://i.postimg.cc/90X0Jn4y/extension-icon-32x32.png" }}
-      description="Please select a country and city to get started"
-    />
-  </List>;
-}
-
 export default function Command() {
   const { value: savedCountry } = useLocalStorage<Country | undefined>("selectedCountry", undefined);
   const { value: savedCity } = useLocalStorage<string | undefined>("selectedCity", undefined);
@@ -377,7 +375,6 @@ export default function Command() {
   }
   return (
     <List
-      searchBarAccessory={<List.Dropdown value="Testing" onChange={() => {}} tooltip="Select a country" />}
       actions={
         <ActionPanel>
           <Action.Push title="Location Form" target={<LocationForm />} />
