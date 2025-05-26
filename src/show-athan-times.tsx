@@ -9,10 +9,11 @@ import {
   Toast,
   useNavigation,
 } from "@raycast/api";
-import { useEffect, useState } from "react";
-import { City, Country, UserSelection, AthanResponse, AthanTimings, GeoNamesResponse } from "./types/types";
 import { useLocalStorage } from "@raycast/utils";
+import { useEffect, useState } from "react";
 import { config } from "./config";
+import { formatTime } from "./utils/hoursSystem";
+import { City, Country, UserSelection, AthanResponse, AthanTimings, GeoNamesResponse } from "./types/types";
 
 function LocationForm() {
   // Countries
@@ -41,7 +42,7 @@ function LocationForm() {
 
         const response = await fetch("https://api.countrystatecity.in/v1/countries/", {
           headers: {
-            // Raycast will bundle this environment variable
+            // Country State City API Key
             "X-CSCAPI-KEY": config.countryStateCityApiKey,
           },
         });
@@ -56,7 +57,6 @@ function LocationForm() {
         showToast({
           style: Toast.Style.Failure,
           title: "Failed to fetch countries",
-          // Question
           message: error instanceof Error ? error.message : "Unknown Error",
         });
       }
@@ -78,12 +78,15 @@ function LocationForm() {
         // const response = await fetch(
         //   `https://api.countrystatecity.in/v1/countries/PS/cities`,
         //   {
+
         //     headers: {
-        //       "X-CSCAPI-KEY": "dDM5Ulc1SjhPN0lFVG5JeWFqMW4zVW1yOWhsSGdIS3NPZGdwNEV4ag==",
+        //       // Country State City API Key
+        //       "X-CSCAPI-KEY": config.countryStateCityApiKey,
         //     },
         //   },
         // );
         const response = await fetch(
+          // GeoNames API, a Username for a user enabled webservice is required
           `http://api.geonames.org/searchJSON?country=${selectedCountry.iso2}&featureClass=P&maxRows=1000&username=${config.geonamesUsername}`,
         );
 
@@ -158,7 +161,9 @@ function LocationForm() {
         <Form.Dropdown id="city" title="city" value={selectedCity || ""} onChange={setSelectedCity}>
           <Form.Dropdown.Item title="Select a city..." value="" />
           {cities?.map((city) => {
-            return <Form.Dropdown.Item key={city.name} value={city.name} title={city.name} />;
+            return (
+              <Form.Dropdown.Item key={`${selectedCountry.iso2}-${city.name}`} value={city.name} title={city.name} />
+            );
           })}
         </Form.Dropdown>
       )}
@@ -170,23 +175,16 @@ function LocationForm() {
   );
 }
 
-function HoursSystemDropdown() {
-  const [hoursSystem, setHoursSystem] = useState<string>("12");
-
-  return (
-    <List.Dropdown id="hoursSystem" value={hoursSystem} onChange={setHoursSystem} tooltip="Select a hours system">
-      <List.Dropdown.Section title="Hours System">
-        <List.Dropdown.Item title="12 hours" value="12" />
-        <List.Dropdown.Item title="24 hours" value="24" />
-      </List.Dropdown.Section>
-    </List.Dropdown>
-  );
-}
-
 function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
   const [athanTimes, setAthanTimes] = useState<AthanTimings>();
   const [loadingTimes, setLoadingTimes] = useState(false);
   const { push } = useNavigation();
+
+  const {
+    value: hoursSystem,
+    setValue: setHoursSystem,
+    isLoading: isLoadingHoursSystem,
+  } = useLocalStorage<string>("hoursSystem", "24");
 
   const { setValue: setSelectedCountry } = useLocalStorage<Country | undefined>("selectedCountry", undefined);
   const { setValue: setSelectedCity } = useLocalStorage<string | undefined>("selectedCity", undefined);
@@ -195,12 +193,6 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
     try {
       await setSelectedCountry(undefined);
       await setSelectedCity(undefined);
-
-      showToast({
-        style: Toast.Style.Success,
-        title: "Location cleared",
-        message: "You'll be redirected to location selection",
-      });
 
       push(<LocationForm />);
     } catch (error) {
@@ -228,9 +220,6 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
         );
 
         const data = (await response.json()) as AthanResponse;
-
-        // console.log("Full Response : ", data);
-        // console.log("Athan Times : ", data.data.timings);
 
         setAthanTimes(data.data.timings);
 
@@ -275,12 +264,30 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
   return (
     <List
       navigationTitle={`Athan Times - ${selectedCountry?.name}, ${selectedCity}`}
-      searchBarAccessory={<HoursSystemDropdown />}
+      searchBarAccessory={
+        <List.Dropdown
+          id="hoursSystem"
+          value={hoursSystem}
+          isLoading={isLoadingHoursSystem}
+          tooltip="Select a hours system"
+          onChange={async (value) => {
+            await setHoursSystem(value);
+            showToast({
+              style: Toast.Style.Success,
+              title: `Switched to ${value === "24" ? "24-hour" : "12-hour"} format`,
+            });
+          }}
+        >
+          <List.Dropdown.Section title="Hours System">
+            <List.Dropdown.Item title="24 hours" value="24" />
+            <List.Dropdown.Item title="12 hours" value="12" />
+          </List.Dropdown.Section>
+        </List.Dropdown>
+      }
       // To Fix : Main action are not showing
       actions={
         <ActionPanel>
           <ActionPanel.Section title="Settings">
-            <Action title="Open Preferences" onAction={openExtensionPreferences} icon={Icon.Gear} />
             <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
           </ActionPanel.Section>
         </ActionPanel>
@@ -289,10 +296,9 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
       <List.Item
         title="Fajr (الفجر)"
         icon={Icon.MoonDown}
-        accessories={[{ text: athanTimes.Fajr }]}
+        accessories={[{ text: formatTime(athanTimes.Fajr, hoursSystem || "24") }]}
         actions={
           <ActionPanel>
-            <Action title="Open Preferences" onAction={openExtensionPreferences} icon={Icon.Gear} />
             <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
           </ActionPanel>
         }
@@ -300,10 +306,9 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
       <List.Item
         title="Sunrise (الشروق)"
         icon={Icon.Sunrise}
-        accessories={[{ text: athanTimes.Sunrise }]}
+        accessories={[{ text: formatTime(athanTimes.Sunrise, hoursSystem || "24") }]}
         actions={
           <ActionPanel>
-            <Action title="Open Preferences" onAction={openExtensionPreferences} icon={Icon.Gear} />
             <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
           </ActionPanel>
         }
@@ -311,10 +316,9 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
       <List.Item
         title="Dhuhr (الظهر)"
         icon={Icon.Sun}
-        accessories={[{ text: athanTimes.Dhuhr }]}
+        accessories={[{ text: formatTime(athanTimes.Dhuhr, hoursSystem || "24") }]}
         actions={
           <ActionPanel>
-            <Action title="Open Preferences" onAction={openExtensionPreferences} icon={Icon.Gear} />
             <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
           </ActionPanel>
         }
@@ -322,10 +326,9 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
       <List.Item
         title="Asr (العصر)"
         icon={Icon.Sun}
-        accessories={[{ text: athanTimes.Asr }]}
+        accessories={[{ text: formatTime(athanTimes.Asr, hoursSystem || "24") }]}
         actions={
           <ActionPanel>
-            <Action title="Open Preferences" onAction={openExtensionPreferences} icon={Icon.Gear} />
             <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
           </ActionPanel>
         }
@@ -333,10 +336,9 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
       <List.Item
         title="Maghrib - Sunset (المغرب)"
         icon={Icon.MoonUp}
-        accessories={[{ text: athanTimes.Maghrib }]}
+        accessories={[{ text: formatTime(athanTimes.Maghrib, hoursSystem || "24") }]}
         actions={
           <ActionPanel>
-            <Action title="Open Preferences" onAction={openExtensionPreferences} icon={Icon.Gear} />
             <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
           </ActionPanel>
         }
@@ -344,10 +346,9 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
       <List.Item
         title="Isha (العشاء)"
         icon={Icon.Moon}
-        accessories={[{ text: athanTimes.Isha }]}
+        accessories={[{ text: formatTime(athanTimes.Isha, hoursSystem || "24") }]}
         actions={
           <ActionPanel>
-            <Action title="Open Preferences" onAction={openExtensionPreferences} icon={Icon.Gear} />
             <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
           </ActionPanel>
         }
@@ -355,12 +356,32 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
       <List.Item
         title="First third (الثلث الأول من الليل)"
         icon={Icon.StackedBars1}
-        accessories={[{ text: athanTimes.Firstthird }]}
+        accessories={[{ text: formatTime(athanTimes.Firstthird, hoursSystem || "24") }]}
+        actions={
+          <ActionPanel>
+            <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
+          </ActionPanel>
+        }
+      />
+      <List.Item
+        title="Midnight (منتصف الليل)"
+        icon={Icon.CircleProgress50}
+        accessories={[{ text: formatTime(athanTimes.Midnight, hoursSystem || "24") }]}
+        actions={
+          <ActionPanel>
+            <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
+          </ActionPanel>
+        }
       />
       <List.Item
         title="Last third (الثلث الأخير من الليل)"
         icon={Icon.StackedBars3}
-        accessories={[{ text: athanTimes.Lastthird }]}
+        accessories={[{ text: formatTime(athanTimes.Lastthird, hoursSystem || "24") }]}
+        actions={
+          <ActionPanel>
+            <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
+          </ActionPanel>
+        }
       />
     </List>
   );

@@ -17,6 +17,7 @@ export type GeoNamesResponse = {
 export type UserSelection = {
   selectedCountry: Country | undefined;
   selectedCity: string | undefined;
+  hoursSystem?: string;
 };
 
 export type AthanTimings = {
@@ -27,6 +28,7 @@ export type AthanTimings = {
   Maghrib: string;
   Isha: string;
   Firstthird: string;
+  Midnight: string;
   Lastthird: string;
 };
 
