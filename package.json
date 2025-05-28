@@ -13,7 +13,7 @@
   "commands": [
     {
       "name": "show-athan-times",
-      "title": "Show Athan Times",
+      "title": "Show Athan (Prayer) Times",
       "description": "Start display the athan times",
       "mode": "view"
     }

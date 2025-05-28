@@ -1,19 +1,10 @@
-import {
-  Action,
-  ActionPanel,
-  Form,
-  Icon,
-  List,
-  openExtensionPreferences,
-  showToast,
-  Toast,
-  useNavigation,
-} from "@raycast/api";
+import { Action, ActionPanel, Color, Form, Icon, List, showToast, Toast, useNavigation } from "@raycast/api";
 import { useLocalStorage } from "@raycast/utils";
 import { useEffect, useState } from "react";
 import { config } from "./config";
 import { formatTime } from "./utils/hoursSystem";
 import { City, Country, UserSelection, AthanResponse, AthanTimings, GeoNamesResponse } from "./types/types";
+import { calculateRemainingTime, formatTimeRemaining, getNextPrayer } from "./utils/prayerUtils";
 
 function LocationForm() {
   // Countries
@@ -178,6 +169,8 @@ function LocationForm() {
 function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
   const [athanTimes, setAthanTimes] = useState<AthanTimings>();
   const [loadingTimes, setLoadingTimes] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState<string>("");
+
   const { push } = useNavigation();
 
   const {
@@ -188,6 +181,27 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
 
   const { setValue: setSelectedCountry } = useLocalStorage<Country | undefined>("selectedCountry", undefined);
   const { setValue: setSelectedCity } = useLocalStorage<string | undefined>("selectedCity", undefined);
+
+  const nextPrayer = athanTimes ? getNextPrayer(athanTimes) : null;
+
+  // Countdown timer effect
+  useEffect(() => {
+    if (!nextPrayer) {
+      setTimeRemaining("");
+      return;
+    }
+
+    const updateCountdown = () => {
+      const remainingMinutes = calculateRemainingTime(nextPrayer);
+      const formattedTime = formatTimeRemaining(remainingMinutes);
+      setTimeRemaining(formattedTime);
+    };
+
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+
+    return () => clearInterval(interval);
+  }, [nextPrayer]);
 
   async function clearSavedLocation() {
     try {
@@ -261,6 +275,32 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
     );
   }
 
+  const getPrayerAccessories = (prayerName: string, prayerTime: string) => {
+    const accessories = [];
+
+    if (nextPrayer && nextPrayer.name === prayerName && nextPrayer.isWithinHour) {
+      accessories.push({
+        tag: {
+          value: "Next",
+          color: Color.Green,
+        },
+      });
+    }
+
+    if (nextPrayer && nextPrayer.name === prayerName && timeRemaining) {
+      accessories.push({
+        tag: { value: `in ${timeRemaining}`, color: Color.Green },
+        icon: Icon.Clock,
+      });
+    }
+
+    accessories.push({
+      text: formatTime(prayerTime, hoursSystem || "24"),
+    });
+
+    return accessories;
+  };
+
   return (
     <List
       navigationTitle={`Athan Times - ${selectedCountry?.name}, ${selectedCity}`}
@@ -296,7 +336,7 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
       <List.Item
         title="Fajr (الفجر)"
         icon={Icon.MoonDown}
-        accessories={[{ text: formatTime(athanTimes.Fajr, hoursSystem || "24") }]}
+        accessories={getPrayerAccessories("Fajr", athanTimes.Fajr)}
         actions={
           <ActionPanel>
             <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
@@ -306,7 +346,7 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
       <List.Item
         title="Sunrise (الشروق)"
         icon={Icon.Sunrise}
-        accessories={[{ text: formatTime(athanTimes.Sunrise, hoursSystem || "24") }]}
+        accessories={getPrayerAccessories("Sunrise", athanTimes.Sunrise)}
         actions={
           <ActionPanel>
             <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
@@ -316,7 +356,7 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
       <List.Item
         title="Dhuhr (الظهر)"
         icon={Icon.Sun}
-        accessories={[{ text: formatTime(athanTimes.Dhuhr, hoursSystem || "24") }]}
+        accessories={getPrayerAccessories("Dhuhr", athanTimes.Dhuhr)}
         actions={
           <ActionPanel>
             <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
@@ -326,7 +366,7 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
       <List.Item
         title="Asr (العصر)"
         icon={Icon.Sun}
-        accessories={[{ text: formatTime(athanTimes.Asr, hoursSystem || "24") }]}
+        accessories={getPrayerAccessories("Asr", athanTimes.Asr)}
         actions={
           <ActionPanel>
             <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
@@ -336,7 +376,7 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
       <List.Item
         title="Maghrib - Sunset (المغرب)"
         icon={Icon.MoonUp}
-        accessories={[{ text: formatTime(athanTimes.Maghrib, hoursSystem || "24") }]}
+        accessories={getPrayerAccessories("Maghrib", athanTimes.Maghrib)}
         actions={
           <ActionPanel>
             <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
@@ -346,7 +386,7 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
       <List.Item
         title="Isha (العشاء)"
         icon={Icon.Moon}
-        accessories={[{ text: formatTime(athanTimes.Isha, hoursSystem || "24") }]}
+        accessories={getPrayerAccessories("Isha", athanTimes.Isha)}
         actions={
           <ActionPanel>
             <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
@@ -356,7 +396,7 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
       <List.Item
         title="First third (الثلث الأول من الليل)"
         icon={Icon.StackedBars1}
-        accessories={[{ text: formatTime(athanTimes.Firstthird, hoursSystem || "24") }]}
+        accessories={getPrayerAccessories("Firstthird", athanTimes.Firstthird)}
         actions={
           <ActionPanel>
             <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
@@ -366,7 +406,7 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
       <List.Item
         title="Midnight (منتصف الليل)"
         icon={Icon.CircleProgress50}
-        accessories={[{ text: formatTime(athanTimes.Midnight, hoursSystem || "24") }]}
+        accessories={getPrayerAccessories("Midnight", athanTimes.Midnight)}
         actions={
           <ActionPanel>
             <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
@@ -376,7 +416,7 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
       <List.Item
         title="Last third (الثلث الأخير من الليل)"
         icon={Icon.StackedBars3}
-        accessories={[{ text: formatTime(athanTimes.Lastthird, hoursSystem || "24") }]}
+        accessories={getPrayerAccessories("Lastthird", athanTimes.Lastthird)}
         actions={
           <ActionPanel>
             <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />

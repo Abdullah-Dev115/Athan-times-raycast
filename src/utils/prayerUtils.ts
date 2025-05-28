@@ -1,0 +1,97 @@
+import { AthanTimings } from "../types/types";
+
+// Why it is interface?
+export interface NextPrayerInfo {
+  name: string;
+  time: string;
+  minutesUntil: number;
+  isWithinHour: boolean;
+}
+
+export function getNextPrayer(athanTimes: AthanTimings): NextPrayerInfo | null {
+  const nowTime = new Date();
+  const currentHour = nowTime.getHours();
+  const currentMinute = nowTime.getMinutes();
+  const currentTimeInMinutes = currentHour * 60 + currentMinute;
+
+  const prayers = [
+    { name: "Fajr", time: athanTimes.Fajr },
+    { name: "Sunrise", time: athanTimes.Sunrise },
+    { name: "Dhuhr", time: athanTimes.Dhuhr },
+    { name: "Asr", time: athanTimes.Asr },
+    { name: "Maghrib", time: athanTimes.Maghrib },
+    { name: "Isha", time: athanTimes.Isha },
+    { name: "Firstthird", time: athanTimes.Firstthird },
+    { name: "Midnight", time: athanTimes.Midnight },
+    { name: "Lastthird", time: athanTimes.Lastthird },
+  ];
+
+  const prayerTimesInMinutes = prayers.map((prayer) => {
+    const [hours, minutes] = prayer.time.split(":").map(Number);
+    return {
+      ...prayer,
+      timeInMinutes: hours * 60 + minutes,
+    };
+  });
+
+  for (const prayer of prayerTimesInMinutes) {
+    if (prayer.timeInMinutes > currentTimeInMinutes) {
+      const minutesUntil = prayer.timeInMinutes - currentTimeInMinutes;
+      return {
+        name: prayer.name,
+        time: prayer.time,
+        minutesUntil,
+        isWithinHour: minutesUntil <= 60,
+      };
+    }
+  }
+
+  const fajrTomorrow = prayerTimesInMinutes[0];
+  const minutesUntilTomorrow = 24 * 60 - currentTimeInMinutes + fajrTomorrow.timeInMinutes;
+
+  return {
+    name: fajrTomorrow.name,
+    time: fajrTomorrow.time,
+    minutesUntil: minutesUntilTomorrow,
+    isWithinHour: minutesUntilTomorrow <= 60,
+  };
+}
+
+// Created by AI
+export function formatTimeRemaining(totalMinutes: number): string {
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = Math.floor(totalMinutes % 60);
+  const seconds = Math.floor((totalMinutes % 1) * 60);
+
+  if (hours > 0) {
+    // Show hours:minutes format for longer durations
+    return `${hours}:${minutes.toString().padStart(2, "0")}h`;
+  } else {
+    // Show minutes:seconds format for under 1 hour
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  }
+}
+
+export function calculateRemainingTime(nextPrayer: NextPrayerInfo): number {
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinute = now.getMinutes();
+  const currentSecond = now.getSeconds();
+
+  // Convert current time to total minutes (with seconds as decimal)
+  const currentTimeInMinutes = currentHour * 60 + currentMinute + currentSecond / 60;
+
+  // Parse next prayer time
+  const [hours, minutes] = nextPrayer.time.split(":").map(Number);
+  const prayerTimeInMinutes = hours * 60 + minutes;
+
+  // Calculate difference
+  let remainingMinutes = prayerTimeInMinutes - currentTimeInMinutes;
+
+  // Handle next day case (if remaining is negative, it's tomorrow)
+  if (remainingMinutes <= 0) {
+    remainingMinutes += 24 * 60; // Add 24 hours
+  }
+
+  return remainingMinutes;
+}
