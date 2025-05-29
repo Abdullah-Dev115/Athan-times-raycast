@@ -16,14 +16,10 @@ export function getNextPrayer(athanTimes: AthanTimings): NextPrayerInfo | null {
 
   const prayers = [
     { name: "Fajr", time: athanTimes.Fajr },
-    { name: "Sunrise", time: athanTimes.Sunrise },
     { name: "Dhuhr", time: athanTimes.Dhuhr },
     { name: "Asr", time: athanTimes.Asr },
     { name: "Maghrib", time: athanTimes.Maghrib },
     { name: "Isha", time: athanTimes.Isha },
-    { name: "Firstthird", time: athanTimes.Firstthird },
-    { name: "Midnight", time: athanTimes.Midnight },
-    { name: "Lastthird", time: athanTimes.Lastthird },
   ];
 
   const prayerTimesInMinutes = prayers.map((prayer) => {
@@ -64,10 +60,10 @@ export function formatTimeRemaining(totalMinutes: number): string {
   const seconds = Math.floor((totalMinutes % 1) * 60);
 
   if (hours > 0) {
-    // Show hours:minutes format for longer durations
+    // Show hours and minutes for longer durations
     return `${hours}:${minutes.toString().padStart(2, "0")}h`;
   } else {
-    // Show minutes:seconds format for under 1 hour
+    // Show minutes and seconds for under 1 hour
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   }
 }

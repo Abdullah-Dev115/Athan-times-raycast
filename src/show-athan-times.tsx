@@ -329,100 +329,130 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
         <ActionPanel>
           <ActionPanel.Section title="Settings">
             <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
+            <Action.OpenInBrowser
+              title="There Is an Issue!"
+              url="https://iabdullah.dev/en/athan-times-form"
+              icon={Icon.ExclamationMark}
+              shortcut={{ modifiers: ["cmd"], key: "i" }}
+            />
+            <Action.OpenInBrowser
+              title="I Have Feedback, Suggestions"
+              url="https://iabdullah.dev/en/athan-times-form"
+              icon={Icon.Message}
+              shortcut={{ modifiers: ["cmd"], key: "f" }}
+            />
           </ActionPanel.Section>
         </ActionPanel>
       }
     >
-      <List.Item
-        title="Fajr (الفجر)"
-        icon={Icon.MoonDown}
-        accessories={getPrayerAccessories("Fajr", athanTimes.Fajr)}
-        actions={
-          <ActionPanel>
-            <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
-          </ActionPanel>
-        }
-      />
-      <List.Item
-        title="Sunrise (الشروق)"
-        icon={Icon.Sunrise}
-        accessories={getPrayerAccessories("Sunrise", athanTimes.Sunrise)}
-        actions={
-          <ActionPanel>
-            <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
-          </ActionPanel>
-        }
-      />
-      <List.Item
-        title="Dhuhr (الظهر)"
-        icon={Icon.Sun}
-        accessories={getPrayerAccessories("Dhuhr", athanTimes.Dhuhr)}
-        actions={
-          <ActionPanel>
-            <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
-          </ActionPanel>
-        }
-      />
-      <List.Item
-        title="Asr (العصر)"
-        icon={Icon.Sun}
-        accessories={getPrayerAccessories("Asr", athanTimes.Asr)}
-        actions={
-          <ActionPanel>
-            <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
-          </ActionPanel>
-        }
-      />
-      <List.Item
-        title="Maghrib - Sunset (المغرب)"
-        icon={Icon.MoonUp}
-        accessories={getPrayerAccessories("Maghrib", athanTimes.Maghrib)}
-        actions={
-          <ActionPanel>
-            <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
-          </ActionPanel>
-        }
-      />
-      <List.Item
-        title="Isha (العشاء)"
-        icon={Icon.Moon}
-        accessories={getPrayerAccessories("Isha", athanTimes.Isha)}
-        actions={
-          <ActionPanel>
-            <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
-          </ActionPanel>
-        }
-      />
-      <List.Item
-        title="First third (الثلث الأول من الليل)"
-        icon={Icon.StackedBars1}
-        accessories={getPrayerAccessories("Firstthird", athanTimes.Firstthird)}
-        actions={
-          <ActionPanel>
-            <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
-          </ActionPanel>
-        }
-      />
-      <List.Item
-        title="Midnight (منتصف الليل)"
-        icon={Icon.CircleProgress50}
-        accessories={getPrayerAccessories("Midnight", athanTimes.Midnight)}
-        actions={
-          <ActionPanel>
-            <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
-          </ActionPanel>
-        }
-      />
-      <List.Item
-        title="Last third (الثلث الأخير من الليل)"
-        icon={Icon.StackedBars3}
-        accessories={getPrayerAccessories("Lastthird", athanTimes.Lastthird)}
-        actions={
-          <ActionPanel>
-            <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
-          </ActionPanel>
-        }
-      />
+      <List.Section title="Obligatory Prayers Athan Times">
+        <List.Item
+          title="Fajr (الفجر)"
+          icon={Icon.MoonDown}
+          accessories={getPrayerAccessories("Fajr", athanTimes.Fajr)}
+          actions={
+            <ActionPanel>
+              <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
+              <Action.OpenInBrowser
+                title="There Is an Issue!"
+                url="https://iabdullah.dev/en/athan-times-form"
+                icon={Icon.ExclamationMark}
+                shortcut={{ modifiers: ["cmd"], key: "i" }}
+              />
+              <Action.OpenInBrowser
+                title="I Have Feedback, Suggestions"
+                url="https://iabdullah.dev/en/athan-times-form"
+                icon={Icon.Message}
+                shortcut={{ modifiers: ["cmd"], key: "f" }}
+              />
+            </ActionPanel>
+          }
+        />
+        <List.Item
+          title="Dhuhr (الظهر)"
+          icon={Icon.Sun}
+          accessories={getPrayerAccessories("Dhuhr", athanTimes.Dhuhr)}
+          actions={
+            <ActionPanel>
+              <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
+            </ActionPanel>
+          }
+        />
+        <List.Item
+          title="Asr (العصر)"
+          icon={Icon.Sun}
+          accessories={getPrayerAccessories("Asr", athanTimes.Asr)}
+          actions={
+            <ActionPanel>
+              <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
+            </ActionPanel>
+          }
+        />
+        <List.Item
+          title="Maghrib - Sunset (المغرب)"
+          icon={Icon.MoonUp}
+          accessories={getPrayerAccessories("Maghrib", athanTimes.Maghrib)}
+          actions={
+            <ActionPanel>
+              <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
+            </ActionPanel>
+          }
+        />
+        <List.Item
+          title="Isha (العشاء)"
+          icon={Icon.Moon}
+          accessories={getPrayerAccessories("Isha", athanTimes.Isha)}
+          actions={
+            <ActionPanel>
+              <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
+            </ActionPanel>
+          }
+        />
+      </List.Section>
+
+      <List.Section title="Other Prayers">
+        <List.Item
+          title="Sunrise (الشروق)"
+          icon={Icon.Sunrise}
+          accessories={getPrayerAccessories("Sunrise", athanTimes.Sunrise)}
+          actions={
+            <ActionPanel>
+              <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
+            </ActionPanel>
+          }
+        />
+
+        <List.Item
+          title="First third (الثلث الأول من الليل)"
+          icon={Icon.StackedBars1}
+          accessories={getPrayerAccessories("Firstthird", athanTimes.Firstthird)}
+          actions={
+            <ActionPanel>
+              <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
+            </ActionPanel>
+          }
+        />
+        <List.Item
+          title="Midnight (منتصف الليل)"
+          icon={Icon.CircleProgress50}
+          accessories={getPrayerAccessories("Midnight", athanTimes.Midnight)}
+          actions={
+            <ActionPanel>
+              <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
+            </ActionPanel>
+          }
+        />
+        <List.Item
+          title="Last third (الثلث الأخير من الليل)"
+          icon={Icon.StackedBars3}
+          accessories={getPrayerAccessories("Lastthird", athanTimes.Lastthird)}
+          actions={
+            <ActionPanel>
+              <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
+            </ActionPanel>
+          }
+        />
+      </List.Section>
     </List>
   );
 }
