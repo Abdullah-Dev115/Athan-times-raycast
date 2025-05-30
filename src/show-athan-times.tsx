@@ -571,7 +571,7 @@ export default function Command() {
     >
       <List.EmptyView
         title="Welcome to Athan Times"
-        icon={{ source: "https://i.postimg.cc/FH8nxF3q/Icon-100.png" }}
+        icon={{ source: "Icon-100.png" }}
         description="Please select a country and city to get started"
       />
     </List>
