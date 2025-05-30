@@ -1,8 +1,8 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "athan-times",
-  "title": "Athan (Prayer) Times",
-  "description": "an extension to show prayer times for muslims (Athan Times)",
+  "title": "Athan (prayer) Times",
+  "description": "An extension to show prayer times for muslims (Athan Times)",
   "keywords": [
     "Athan",
     "Prayer",
@@ -27,7 +27,7 @@
   "commands": [
     {
       "name": "show-athan-times",
-      "title": "Show Athan (Prayer) Times",
+      "title": "Show Athan (prayer) Times",
       "description": "Start display the athan times",
       "keywords": [
         "Athan",
