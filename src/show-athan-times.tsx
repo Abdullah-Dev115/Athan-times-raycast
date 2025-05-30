@@ -324,7 +324,7 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
           </List.Dropdown.Section>
         </List.Dropdown>
       }
-      // To Fix : Main action are not showing
+      // TODO : Main action are not showing
       actions={
         <ActionPanel>
           <ActionPanel.Section title="Settings">
