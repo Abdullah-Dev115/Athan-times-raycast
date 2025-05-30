@@ -1,6 +1,6 @@
 # Athan Times
 
-[![ICon](https://i.postimg.cc/FH8nxF3q/Icon-100.png "ICon")](https://i.postimg.cc/FH8nxF3q/Icon-100.png "ICon")
+[![Icon](https://i.postimg.cc/FH8nxF3q/Icon-100.png "Icon")](https://i.postimg.cc/FH8nxF3q/Icon-100.png "Icon")
 
 an extension to show prayer times for muslims (Athan Times)
 

@@ -1,6 +1,5 @@
 import { AthanTimings } from "../types/types";
 
-// Why it is interface?
 export interface NextPrayerInfo {
   name: string;
   time: string;
@@ -77,16 +76,14 @@ export function calculateRemainingTime(nextPrayer: NextPrayerInfo): number {
   // Convert current time to total minutes (with seconds as decimal)
   const currentTimeInMinutes = currentHour * 60 + currentMinute + currentSecond / 60;
 
-  // Parse next prayer time
   const [hours, minutes] = nextPrayer.time.split(":").map(Number);
   const prayerTimeInMinutes = hours * 60 + minutes;
 
-  // Calculate difference
   let remainingMinutes = prayerTimeInMinutes - currentTimeInMinutes;
 
   // Handle next day case (if remaining is negative, it's tomorrow)
   if (remainingMinutes <= 0) {
-    remainingMinutes += 24 * 60; // Add 24 hours
+    remainingMinutes += 24 * 60;
   }
 
   return remainingMinutes;

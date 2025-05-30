@@ -375,6 +375,18 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
           actions={
             <ActionPanel>
               <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
+              <Action.OpenInBrowser
+                title="There Is an Issue!"
+                url="https://iabdullah.dev/en/athan-times-form"
+                icon={Icon.ExclamationMark}
+                shortcut={{ modifiers: ["cmd"], key: "i" }}
+              />
+              <Action.OpenInBrowser
+                title="I Have Feedback, Suggestions"
+                url="https://iabdullah.dev/en/athan-times-form"
+                icon={Icon.Message}
+                shortcut={{ modifiers: ["cmd"], key: "f" }}
+              />
             </ActionPanel>
           }
         />
@@ -385,6 +397,18 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
           actions={
             <ActionPanel>
               <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
+              <Action.OpenInBrowser
+                title="There Is an Issue!"
+                url="https://iabdullah.dev/en/athan-times-form"
+                icon={Icon.ExclamationMark}
+                shortcut={{ modifiers: ["cmd"], key: "i" }}
+              />
+              <Action.OpenInBrowser
+                title="I Have Feedback, Suggestions"
+                url="https://iabdullah.dev/en/athan-times-form"
+                icon={Icon.Message}
+                shortcut={{ modifiers: ["cmd"], key: "f" }}
+              />
             </ActionPanel>
           }
         />
@@ -395,6 +419,18 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
           actions={
             <ActionPanel>
               <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
+              <Action.OpenInBrowser
+                title="There Is an Issue!"
+                url="https://iabdullah.dev/en/athan-times-form"
+                icon={Icon.ExclamationMark}
+                shortcut={{ modifiers: ["cmd"], key: "i" }}
+              />
+              <Action.OpenInBrowser
+                title="I Have Feedback, Suggestions"
+                url="https://iabdullah.dev/en/athan-times-form"
+                icon={Icon.Message}
+                shortcut={{ modifiers: ["cmd"], key: "f" }}
+              />
             </ActionPanel>
           }
         />
@@ -405,6 +441,18 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
           actions={
             <ActionPanel>
               <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
+              <Action.OpenInBrowser
+                title="There Is an Issue!"
+                url="https://iabdullah.dev/en/athan-times-form"
+                icon={Icon.ExclamationMark}
+                shortcut={{ modifiers: ["cmd"], key: "i" }}
+              />
+              <Action.OpenInBrowser
+                title="I Have Feedback, Suggestions"
+                url="https://iabdullah.dev/en/athan-times-form"
+                icon={Icon.Message}
+                shortcut={{ modifiers: ["cmd"], key: "f" }}
+              />
             </ActionPanel>
           }
         />
@@ -418,6 +466,18 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
           actions={
             <ActionPanel>
               <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
+              <Action.OpenInBrowser
+                title="There Is an Issue!"
+                url="https://iabdullah.dev/en/athan-times-form"
+                icon={Icon.ExclamationMark}
+                shortcut={{ modifiers: ["cmd"], key: "i" }}
+              />
+              <Action.OpenInBrowser
+                title="I Have Feedback, Suggestions"
+                url="https://iabdullah.dev/en/athan-times-form"
+                icon={Icon.Message}
+                shortcut={{ modifiers: ["cmd"], key: "f" }}
+              />
             </ActionPanel>
           }
         />
@@ -429,6 +489,18 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
           actions={
             <ActionPanel>
               <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
+              <Action.OpenInBrowser
+                title="There Is an Issue!"
+                url="https://iabdullah.dev/en/athan-times-form"
+                icon={Icon.ExclamationMark}
+                shortcut={{ modifiers: ["cmd"], key: "i" }}
+              />
+              <Action.OpenInBrowser
+                title="I Have Feedback, Suggestions"
+                url="https://iabdullah.dev/en/athan-times-form"
+                icon={Icon.Message}
+                shortcut={{ modifiers: ["cmd"], key: "f" }}
+              />
             </ActionPanel>
           }
         />
@@ -439,6 +511,18 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
           actions={
             <ActionPanel>
               <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
+              <Action.OpenInBrowser
+                title="There Is an Issue!"
+                url="https://iabdullah.dev/en/athan-times-form"
+                icon={Icon.ExclamationMark}
+                shortcut={{ modifiers: ["cmd"], key: "i" }}
+              />
+              <Action.OpenInBrowser
+                title="I Have Feedback, Suggestions"
+                url="https://iabdullah.dev/en/athan-times-form"
+                icon={Icon.Message}
+                shortcut={{ modifiers: ["cmd"], key: "f" }}
+              />
             </ActionPanel>
           }
         />
@@ -449,6 +533,18 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
           actions={
             <ActionPanel>
               <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
+              <Action.OpenInBrowser
+                title="There Is an Issue!"
+                url="https://iabdullah.dev/en/athan-times-form"
+                icon={Icon.ExclamationMark}
+                shortcut={{ modifiers: ["cmd"], key: "i" }}
+              />
+              <Action.OpenInBrowser
+                title="I Have Feedback, Suggestions"
+                url="https://iabdullah.dev/en/athan-times-form"
+                icon={Icon.Message}
+                shortcut={{ modifiers: ["cmd"], key: "f" }}
+              />
             </ActionPanel>
           }
         />
@@ -464,6 +560,7 @@ export default function Command() {
   if (savedCountry && savedCity) {
     return <AthanTimes selectedCountry={savedCountry} selectedCity={savedCity} />;
   }
+
   return (
     <List
       actions={
