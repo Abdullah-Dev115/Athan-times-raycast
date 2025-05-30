@@ -282,7 +282,7 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
       accessories.push({
         tag: {
           value: "Next",
-          color: Color.Green,
+          color: Color.Blue,
         },
       });
     }
@@ -330,9 +330,9 @@ function AthanTimes({ selectedCountry, selectedCity }: UserSelection) {
           <ActionPanel.Section title="Settings">
             <Action title="Change Location" onAction={clearSavedLocation} icon={Icon.Map} />
             <Action.OpenInBrowser
-              title="There Is an Issue!"
+              title="I Have an Issue!"
               url="https://iabdullah.dev/en/athan-times-form"
-              icon={Icon.ExclamationMark}
+              icon={Icon.Exclamationmark}
               shortcut={{ modifiers: ["cmd"], key: "i" }}
             />
             <Action.OpenInBrowser

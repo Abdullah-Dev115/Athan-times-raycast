@@ -1,8 +1,22 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "athan-times",
-  "title": "Athan Times",
-  "description": "an extension to show pray times for muslims (Athan Times)",
+  "title": "Athan (Prayer) Times",
+  "description": "an extension to show prayer times for muslims (Athan Times)",
+  "keywords": [
+    "Athan",
+    "Prayer",
+    "Pray",
+    "Salah",
+    "أذان",
+    "صلاة",
+    "صلوات",
+    "Times",
+    "Muslim",
+    "Islam",
+    "Prayer Times",
+    "Athan Times"
+  ],
   "icon": "extension-icon.png",
   "author": "Abdullah-Dev115",
   "categories": [
@@ -15,6 +29,20 @@
       "name": "show-athan-times",
       "title": "Show Athan (Prayer) Times",
       "description": "Start display the athan times",
+      "keywords": [
+        "Athan",
+        "Prayer",
+        "Pray",
+        "Salah",
+        "أذان",
+        "صلاة",
+        "صلوات",
+        "Times",
+        "Muslim",
+        "Islam",
+        "Prayer Times",
+        "Athan Times"
+      ],
       "mode": "view"
     }
   ],
