@@ -7,7 +7,7 @@ export interface NextPrayerInfo {
   isWithinHour: boolean;
 }
 
-export function getNextPrayer(athanTimes: AthanTimings): NextPrayerInfo | null {
+export function getNextPrayer(athanTimes: AthanTimings): NextPrayerInfo {
   const nowTime = new Date();
   const currentHour = nowTime.getHours();
   const currentMinute = nowTime.getMinutes();
