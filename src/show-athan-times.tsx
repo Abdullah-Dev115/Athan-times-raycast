@@ -33,7 +33,7 @@ function LocationForm() {
 
         const response = await fetch("https://api.countrystatecity.in/v1/countries/", {
           headers: {
-            // Country State City API Key
+            // Country State City API Key, I know it is not secure, I did not find a way to hide the API Key in Raycast Extension 😕
             "X-CSCAPI-KEY": config.countryStateCityApiKey,
           },
         });
