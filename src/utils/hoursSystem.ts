@@ -21,7 +21,7 @@ export function convertTo24Hour(time: string): string {
   return `${hour24.toString().padStart(2, "0")}:${min}`;
 }
 
-export function formatTime(time: string, hoursSystem: string): string {
+export function formatTime(time: string, hoursSystem: "12" | "24"): string {
   if (hoursSystem === "24") {
     return convertTo24Hour(time);
   }
