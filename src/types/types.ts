@@ -17,7 +17,7 @@ export type GeoNamesResponse = {
 export type UserSelection = {
   selectedCountry: Country | undefined;
   selectedCity: string | undefined;
-  hoursSystem?: "12" | "24";
+  hoursSystem?: string;
 };
 
 export type AthanTimings = {
