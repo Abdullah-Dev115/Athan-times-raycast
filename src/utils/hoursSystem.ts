@@ -18,12 +18,7 @@ export function convertTo24Hour(time: string): string {
   const [hours, minutes] = time.split(":");
   const hour24 = parseInt(hours);
   const min = minutes;
-
-  if (hour24 >= 12) {
-    return `${hour24}:${min} PM`;
-  } else {
-    return `${hour24}:${min} AM`;
-  }
+  return `${hour24.toString().padStart(2, "0")}:${min}`;
 }
 
 export function formatTime(time: string, hoursSystem: string): string {
